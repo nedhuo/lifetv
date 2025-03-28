@@ -1,0 +1,38 @@
+{
+  "app": {
+    "name": "LifeTV",
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "empty": "No Data"
+  },
+  "navigation": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "history": "History",
+    "source": "Sources",
+    "settings": "Settings"
+  },
+  "video": {
+    "noVideos": "No videos available",
+    "loadError": "Failed to load",
+    "retry": "Retry"
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "next": "Next",
+    "previous": "Previous",
+    "forward": "Forward",
+    "backward": "Backward",
+    "quality": "Quality",
+    "speed": "Speed",
+    "subtitle": "Subtitle",
+    "loadingError": "Failed to play",
+    "retry": "Retry"
+  },
+  "home": {
+    "title": "Home",
+    "noVideos": "No Videos"
+  }
+}

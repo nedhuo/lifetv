@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "history": "History",
+    "source": "Sources",
+    "settings": "Settings"
+  },
+  "source": {
+    "title": "Video Sources",
+    "urlLabel": "Source URL",
+    "urlHint": "Enter video source configuration URL",
+    "urlRequired": "Please enter source URL",
+    "urlInvalid": "Please enter a valid URL",
+    "add": "Add Source",
+    "addSuccess": "Source added successfully",
+    "addError": "Failed to add source",
+    "currentSources": "Current Sources",
+    "noSources": "No sources available",
+    "loadError": "Failed to load sources",
+    "selected": "Selected source: {}"
+  },
+  "video": {
+    "noVideos": "No videos available",
+    "loadError": "Failed to load videos",
+    "retry": "Retry"
+  },
+  "category": {
+    "all": "All",
+    "loadError": "Failed to load categories"
+  }
+} 

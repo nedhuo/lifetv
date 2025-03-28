@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "home": "首页",
+    "favorites": "收藏",
+    "history": "历史",
+    "source": "视频源",
+    "settings": "设置"
+  },
+  "source": {
+    "title": "视频源管理",
+    "urlLabel": "视频源地址",
+    "urlHint": "请输入视频源配置地址",
+    "urlRequired": "请输入视频源地址",
+    "urlInvalid": "请输入有效的URL地址",
+    "add": "添加视频源",
+    "addSuccess": "添加视频源成功",
+    "addError": "添加视频源失败",
+    "currentSources": "当前视频源",
+    "noSources": "暂无视频源",
+    "loadError": "加载视频源失败",
+    "selected": "已选择视频源：{}"
+  },
+  "video": {
+    "noVideos": "暂无视频",
+    "loadError": "加载视频失败",
+    "retry": "重试"
+  },
+  "category": {
+    "all": "全部",
+    "loadError": "加载分类失败"
+  }
+} 
