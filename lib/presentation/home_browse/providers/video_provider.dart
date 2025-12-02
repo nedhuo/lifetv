@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../data/repositories/video_source_service.dart';
 import '../../../domain/entities/video.dart';
-import '../category_selector.dart';
+import '../../settings/providers/video_source_provider.dart';
 
 final selectedCategoryProvider = StateProvider<String?>((ref) => null);
 
@@ -14,6 +15,7 @@ final videoProvider = FutureProvider.autoDispose<List<Video>>((ref) async {
   final selectedCategory = ref.watch(selectedCategoryProvider);
   
   try {
+    // selectedSource 已经是 VideoSourceConfig 类型，直接使用
     return await videoService.fetchVideos(selectedSource, categoryId: selectedCategory);
   } catch (e) {
     print('获取视频列表失败: $e');

@@ -3,8 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../domain/media_source/video_source_config.dart';
 import '../../../data/repositories/video_source_service.dart';
 
-final videoSourceServiceProvider = Provider((ref) => VideoSourceService());
-
 final selectedSourceProvider = StateProvider<VideoSourceConfig?>((ref) => null);
 
 final videoSourceConfigProvider = AsyncNotifierProvider<VideoSourceConfigNotifier, VideoSourceConfig>(() {

@@ -210,15 +210,37 @@ class VideoSourceListPage extends HookConsumerWidget {
                           urlController.text.isNotEmpty) {
                         setState(() => isLoading = true);
                         try {
-                          final updatedSource = VideoSourceEntity()
-                            ..id = source.id
-                            ..name = nameController.text
-                            ..url = urlController.text
-                            ..isDefault = source.isDefault
-                            ..isActive = source.isActive
-                            ..type = source.type
-                            ..createdAt = source.createdAt
-                            ..updatedAt = DateTime.now();
+                          // 创建新的VideoSourceEntity对象，而不是修改final字段
+                          final updatedSource = VideoSourceEntity(
+                            key: source.key,
+                            name: nameController.text,
+                            url: urlController.text,
+                            api: source.api,
+                            type: source.type,
+                            group: source.group,
+                            logo: source.logo,
+                            ua: source.ua,
+                            referer: source.referer,
+                            origin: source.origin,
+                            cookie: source.cookie,
+                            proxy: source.proxy,
+                            header: source.header,
+                            click: source.click,
+                            desc: source.desc,
+                            ext: source.ext,
+                            jar: source.jar,
+                            categories: source.categories,
+                            searchable: source.searchable,
+                            quickSearch: source.quickSearch,
+                            filterable: source.filterable,
+                            playerType: source.playerType,
+                            searchUrl: source.searchUrl,
+                            playUrl: source.playUrl,
+                            isDefault: source.isDefault,
+                            isActive: source.isActive,
+                          )..id = source.id
+                           ..createdAt = source.createdAt
+                           ..updatedAt = DateTime.now();
                           await ref
                               .read(videoSourceListProvider.notifier)
                               .updateSource(updatedSource);
@@ -252,7 +274,7 @@ class VideoSourceListPage extends HookConsumerWidget {
     VideoSourceEntity source,
   ) async {
     try {
-      await ref.read(videoSourceListProvider.notifier).switchSource(source.id);
+      await ref.read(videoSourceListProvider.notifier).switchSource(source.key);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('已切换到视频源: ${source.name}')),
@@ -287,7 +309,7 @@ class VideoSourceListPage extends HookConsumerWidget {
               try {
                 await ref
                     .read(videoSourceListProvider.notifier)
-                    .removeSource(source.id);
+                    .removeSource(source.key);
                 if (context.mounted) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
