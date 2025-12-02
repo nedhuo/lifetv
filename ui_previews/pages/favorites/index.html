@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收藏 - LifeTV</title>
+    <link rel="stylesheet" href="../../css/shared.css">
+    <style>
+        /* 收藏页特定样式 */
+        .empty-favorites {
+            text-align: center;
+            padding: calc(var(--spacing-xl) * 2);
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-lg);
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+        
+        .empty-description {
+            margin-bottom: var(--spacing-lg);
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边导航 -->
+    <nav class="sidebar">
+        <div class="logo">Logo</div>
+        <div class="sidebar-nav">
+            <a href="../home/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🏠</div>
+                <div class="sidebar-item-text">首页</div>
+            </a>
+            <a href="index.html" class="sidebar-item active">
+                <div class="sidebar-item-icon">❤️</div>
+                <div class="sidebar-item-text">收藏</div>
+            </a>
+            <a href="../history/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">📜</div>
+                <div class="sidebar-item-text">历史</div>
+            </a>
+            <a href="../source/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🎬</div>
+                <div class="sidebar-item-text">视频源</div>
+            </a>
+            <a href="../settings/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">⚙️</div>
+                <div class="sidebar-item-text">设置</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 顶部导航 -->
+    <header class="topnav">
+        <div class="topnav-title">LifeTV</div>
+        <div class="topnav-search">
+            <span class="topnav-search-icon">🔍</span>
+            <input type="text" placeholder="搜索视频">
+        </div>
+    </header>
+
+    <!-- 底部导航 - 移动端优先 -->
+    <nav class="bottomnav">
+        <a href="../home/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🏠</div>
+            <div class="bottomnav-item-text">首页</div>
+        </a>
+        <a href="index.html" class="bottomnav-item active">
+            <div class="bottomnav-item-icon">❤️</div>
+            <div class="bottomnav-item-text">收藏</div>
+        </a>
+        <a href="../history/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">📜</div>
+            <div class="bottomnav-item-text">历史</div>
+        </a>
+        <a href="../source/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🎬</div>
+            <div class="bottomnav-item-text">视频源</div>
+        </a>
+        <a href="../settings/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">⚙️</div>
+            <div class="bottomnav-item-text">设置</div>
+        </a>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 页面标题 -->
+        <h1 class="page-title">我的收藏</h1>
+        
+        <!-- 收藏视频列表 -->
+        <div class="grid" id="favoritesGrid">
+            <!-- 收藏视频卡片将通过JavaScript动态生成 -->
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+        
+        <!-- 空状态 -->
+        <div id="emptyFavorites" class="empty-favorites" style="display: none;">
+            <div class="empty-icon">❤️</div>
+            <h2 class="empty-title">暂无收藏</h2>
+            <p class="empty-description">您还没有收藏任何视频，去首页看看吧！</p>
+            <a href="../home/index.html" class="btn btn-primary">去首页</a>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 LifeTV. All rights reserved.</p>
+    </footer>
+
+    <!-- 引入JavaScript -->
+    <script src="../../js/shared.js"></script>
+    <script>
+        // 收藏页特定JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成并渲染模拟收藏视频数据
+            const favorites = generateMockVideos(8);
+            
+            if (favorites.length > 0) {
+                renderVideoCards('favoritesGrid', favorites);
+            } else {
+                document.getElementById('favoritesGrid').style.display = 'none';
+                document.getElementById('emptyFavorites').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

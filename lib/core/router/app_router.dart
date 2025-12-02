@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../features/home/presentation/pages/home_page.dart';
-import '../../features/player/presentation/pages/player_page.dart';
-import '../../features/source/presentation/pages/source_page.dart';
+import '../../presentation/home_browse/home_page.dart';
+import '../../presentation/player/player_page.dart';
+import '../../presentation/settings/source_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(

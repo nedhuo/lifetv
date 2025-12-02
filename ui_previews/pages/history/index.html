@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史记录 - LifeTV</title>
+    <link rel="stylesheet" href="../../css/shared.css">
+    <style>
+        /* 历史页特定样式 */
+        .history-item {
+            display: flex;
+            gap: var(--spacing-lg);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .history-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .history-thumbnail {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: var(--border-radius-sm);
+            flex-shrink: 0;
+        }
+        
+        .history-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .history-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .history-meta {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+        }
+        
+        .history-time {
+            color: var(--text-light);
+            font-size: var(--font-size-xs);
+        }
+        
+        .history-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: calc(var(--spacing-xl) * 2);
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: var(--spacing-lg);
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+        
+        .empty-description {
+            margin-bottom: var(--spacing-lg);
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边导航 -->
+    <nav class="sidebar">
+        <div class="logo">Logo</div>
+        <div class="sidebar-nav">
+            <a href="../home/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🏠</div>
+                <div class="sidebar-item-text">首页</div>
+            </a>
+            <a href="../favorites/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">❤️</div>
+                <div class="sidebar-item-text">收藏</div>
+            </a>
+            <a href="index.html" class="sidebar-item active">
+                <div class="sidebar-item-icon">📜</div>
+                <div class="sidebar-item-text">历史</div>
+            </a>
+            <a href="../source/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🎬</div>
+                <div class="sidebar-item-text">视频源</div>
+            </a>
+            <a href="../settings/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">⚙️</div>
+                <div class="sidebar-item-text">设置</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 顶部导航 -->
+    <header class="topnav">
+        <div class="topnav-title">LifeTV</div>
+        <div class="topnav-search">
+            <span class="topnav-search-icon">🔍</span>
+            <input type="text" placeholder="搜索视频">
+        </div>
+    </header>
+
+    <!-- 底部导航 - 移动端优先 -->
+    <nav class="bottomnav">
+        <a href="../home/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🏠</div>
+            <div class="bottomnav-item-text">首页</div>
+        </a>
+        <a href="../favorites/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">❤️</div>
+            <div class="bottomnav-item-text">收藏</div>
+        </a>
+        <a href="index.html" class="bottomnav-item active">
+            <div class="bottomnav-item-icon">📜</div>
+            <div class="bottomnav-item-text">历史</div>
+        </a>
+        <a href="../source/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🎬</div>
+            <div class="bottomnav-item-text">视频源</div>
+        </a>
+        <a href="../settings/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">⚙️</div>
+            <div class="bottomnav-item-text">设置</div>
+        </a>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 页面标题 -->
+        <h1 class="page-title">观看历史</h1>
+        
+        <!-- 历史记录列表 -->
+        <div id="historyList">
+            <!-- 历史记录项将通过JavaScript动态生成 -->
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+        
+        <!-- 空状态 -->
+        <div id="emptyHistory" class="empty-history" style="display: none;">
+            <div class="empty-icon">📜</div>
+            <h2 class="empty-title">暂无历史记录</h2>
+            <p class="empty-description">您还没有观看过任何视频，去首页看看吧！</p>
+            <a href="../home/index.html" class="btn btn-primary">去首页</a>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 LifeTV. All rights reserved.</p>
+    </footer>
+
+    <!-- 引入JavaScript -->
+    <script src="../../js/shared.js"></script>
+    <script>
+        // 历史页特定JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成模拟历史记录数据
+            const videos = generateMockVideos(10);
+            const historyList = document.getElementById('historyList');
+            const emptyHistory = document.getElementById('emptyHistory');
+            
+            if (videos.length > 0) {
+                // 渲染历史记录项
+                historyList.innerHTML = '';
+                videos.forEach((video, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-thumbnail" style="background-image: url(${video.thumbnail}); background-size: cover; background-position: center;"></div>
+                        <div class="history-content">
+                            <h3 class="history-title">${video.title}</h3>
+                            <div class="history-meta">
+                                <span>${video.category}</span>
+                                <span>${formatNumber(video.views)}次播放</span>
+                                <span>${video.duration}</span>
+                            </div>
+                            <div class="history-time">
+                                观看时间: ${new Date(Date.now() - index * 3600000).toLocaleString()}
+                            </div>
+                        </div>
+                        <div class="history-actions">
+                            <button class="btn btn-outline btn-sm" onclick="playVideo('${video.id}')">继续播放</button>
+                            <button class="btn btn-outline btn-sm" onclick="removeFromHistory('${video.id}')">删除</button>
+                        </div>
+                    `;
+                    
+                    historyList.appendChild(historyItem);
+                });
+            } else {
+                historyList.style.display = 'none';
+                emptyHistory.style.display = 'block';
+            }
+        });
+        
+        // 模拟从历史记录中移除
+        function removeFromHistory(itemId) {
+            showMessage('已从历史记录中移除');
+            // 这里可以添加实际的移除逻辑
+        }
+    </script>
+</body>
+</html>

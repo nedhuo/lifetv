@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - LifeTV</title>
+    <link rel="stylesheet" href="../../css/shared.css">
+    <style>
+        /* 设置页特定样式 */
+        .settings-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .settings-section {
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .settings-section-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边导航 -->
+    <nav class="sidebar">
+        <div class="logo">Logo</div>
+        <div class="sidebar-nav">
+            <a href="../home/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🏠</div>
+                <div class="sidebar-item-text">首页</div>
+            </a>
+            <a href="../favorites/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">❤️</div>
+                <div class="sidebar-item-text">收藏</div>
+            </a>
+            <a href="../history/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">📜</div>
+                <div class="sidebar-item-text">历史</div>
+            </a>
+            <a href="../source/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🎬</div>
+                <div class="sidebar-item-text">视频源</div>
+            </a>
+            <a href="index.html" class="sidebar-item active">
+                <div class="sidebar-item-icon">⚙️</div>
+                <div class="sidebar-item-text">设置</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 顶部导航 -->
+    <header class="topnav">
+        <div class="topnav-title">LifeTV</div>
+        <div class="topnav-search">
+            <span class="topnav-search-icon">🔍</span>
+            <input type="text" placeholder="搜索视频">
+        </div>
+    </header>
+
+    <!-- 底部导航 - 移动端优先 -->
+    <nav class="bottomnav">
+        <a href="../home/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🏠</div>
+            <div class="bottomnav-item-text">首页</div>
+        </a>
+        <a href="../favorites/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">❤️</div>
+            <div class="bottomnav-item-text">收藏</div>
+        </a>
+        <a href="../history/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">📜</div>
+            <div class="bottomnav-item-text">历史</div>
+        </a>
+        <a href="../source/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🎬</div>
+            <div class="bottomnav-item-text">视频源</div>
+        </a>
+        <a href="index.html" class="bottomnav-item active">
+            <div class="bottomnav-item-icon">⚙️</div>
+            <div class="bottomnav-item-text">设置</div>
+        </a>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 页面标题 -->
+        <h1 class="page-title">设置</h1>
+        
+        <!-- 设置容器 -->
+        <div class="settings-container">
+            <!-- 播放设置 -->
+            <div class="settings-section">
+                <h2 class="settings-section-title">播放设置</h2>
+                <div id="playbackSettings">
+                    <!-- 播放设置项将通过JavaScript动态生成 -->
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 外观设置 -->
+            <div class="settings-section">
+                <h2 class="settings-section-title">外观设置</h2>
+                <div id="appearanceSettings">
+                    <!-- 外观设置项将通过JavaScript动态生成 -->
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 下载设置 -->
+            <div class="settings-section">
+                <h2 class="settings-section-title">下载设置</h2>
+                <div id="downloadSettings">
+                    <!-- 下载设置项将通过JavaScript动态生成 -->
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 LifeTV. All rights reserved.</p>
+    </footer>
+
+    <!-- 引入JavaScript -->
+    <script src="../../js/shared.js"></script>
+    <script>
+        // 设置页特定JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成并渲染模拟设置数据
+            const settings = generateMockSettings();
+            
+            // 分离设置项到不同类别
+            const playbackSettings = settings.filter(setting => ['autoPlay', 'hdQuality'].includes(setting.key));
+            const appearanceSettings = settings.filter(setting => ['darkMode', 'language'].includes(setting.key));
+            const downloadSettings = settings.filter(setting => ['downloadPath', 'maxDownloads'].includes(setting.key));
+            
+            // 渲染不同类别的设置项
+            renderSettings('playbackSettings', playbackSettings);
+            renderSettings('appearanceSettings', appearanceSettings);
+            renderSettings('downloadSettings', downloadSettings);
+        });
+    </script>
+</body>
+</html>

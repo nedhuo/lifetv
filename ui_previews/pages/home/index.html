@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - LifeTV</title>
+    <link rel="stylesheet" href="../../css/shared.css">
+</head>
+<body>
+    <!-- 侧边导航 -->
+    <nav class="sidebar">
+        <div class="logo">Logo</div>
+        <div class="sidebar-nav">
+            <a href="index.html" class="sidebar-item active">
+                <div class="sidebar-item-icon">🏠</div>
+                <div class="sidebar-item-text">首页</div>
+            </a>
+            <a href="../favorites/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">❤️</div>
+                <div class="sidebar-item-text">收藏</div>
+            </a>
+            <a href="../history/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">📜</div>
+                <div class="sidebar-item-text">历史</div>
+            </a>
+            <a href="../source/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🎬</div>
+                <div class="sidebar-item-text">视频源</div>
+            </a>
+            <a href="../settings/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">⚙️</div>
+                <div class="sidebar-item-text">设置</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 顶部导航 -->
+    <header class="topnav">
+        <div class="topnav-title">LifeTV</div>
+        <div class="topnav-tabs">
+            <a href="#" class="topnav-tab active">推荐</a>
+            <a href="#" class="topnav-tab">电影</a>
+            <a href="#" class="topnav-tab">电视剧</a>
+            <a href="#" class="topnav-tab">综艺</a>
+            <a href="#" class="topnav-tab">动漫</a>
+        </div>
+        <div class="topnav-search">
+            <span class="topnav-search-icon">🔍</span>
+            <input type="text" placeholder="搜索视频">
+        </div>
+    </header>
+
+    <!-- 底部导航 - 移动端优先 -->
+    <nav class="bottomnav">
+        <a href="index.html" class="bottomnav-item active">
+            <div class="bottomnav-item-icon">🏠</div>
+            <div class="bottomnav-item-text">首页</div>
+        </a>
+        <a href="../favorites/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">❤️</div>
+            <div class="bottomnav-item-text">收藏</div>
+        </a>
+        <a href="../history/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">📜</div>
+            <div class="bottomnav-item-text">历史</div>
+        </a>
+        <a href="../source/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🎬</div>
+            <div class="bottomnav-item-text">视频源</div>
+        </a>
+        <a href="../settings/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">⚙️</div>
+            <div class="bottomnav-item-text">设置</div>
+        </a>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 页面标题 -->
+        <h1 class="page-title">热门推荐</h1>
+        
+        <!-- 视频卡片网格 -->
+        <div class="grid" id="videoGrid">
+            <!-- 视频卡片将通过JavaScript动态生成 -->
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 LifeTV. All rights reserved.</p>
+    </footer>
+
+    <!-- 引入JavaScript -->
+    <script src="../../js/shared.js"></script>
+    <script>
+        // 首页特定JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成并渲染模拟视频数据
+            const videos = generateMockVideos(18);
+            renderVideoCards('videoGrid', videos);
+        });
+    </script>
+</body>
+</html>

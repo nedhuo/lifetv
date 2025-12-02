@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频播放 - LifeTV</title>
+    <link rel="stylesheet" href="../../css/shared.css">
+    <style>
+        /* 视频播放页特定样式 */
+        .video-info {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .video-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+        
+        .video-meta {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+        }
+        
+        .video-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .video-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .related-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边导航 -->
+    <nav class="sidebar">
+        <div class="logo">Logo</div>
+        <div class="sidebar-nav">
+            <a href="../home/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🏠</div>
+                <div class="sidebar-item-text">首页</div>
+            </a>
+            <a href="../favorites/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">❤️</div>
+                <div class="sidebar-item-text">收藏</div>
+            </a>
+            <a href="../history/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">📜</div>
+                <div class="sidebar-item-text">历史</div>
+            </a>
+            <a href="../source/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">🎬</div>
+                <div class="sidebar-item-text">视频源</div>
+            </a>
+            <a href="../settings/index.html" class="sidebar-item">
+                <div class="sidebar-item-icon">⚙️</div>
+                <div class="sidebar-item-text">设置</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 顶部导航 -->
+    <header class="topnav">
+        <div class="topnav-title">LifeTV</div>
+        <div class="topnav-search">
+            <span class="topnav-search-icon">🔍</span>
+            <input type="text" placeholder="搜索视频">
+        </div>
+    </header>
+
+    <!-- 底部导航 - 移动端优先 -->
+    <nav class="bottomnav">
+        <a href="../home/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🏠</div>
+            <div class="bottomnav-item-text">首页</div>
+        </a>
+        <a href="../favorites/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">❤️</div>
+            <div class="bottomnav-item-text">收藏</div>
+        </a>
+        <a href="../history/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">📜</div>
+            <div class="bottomnav-item-text">历史</div>
+        </a>
+        <a href="../source/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">🎬</div>
+            <div class="bottomnav-item-text">视频源</div>
+        </a>
+        <a href="../settings/index.html" class="bottomnav-item">
+            <div class="bottomnav-item-icon">⚙️</div>
+            <div class="bottomnav-item-text">设置</div>
+        </a>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <main class="main-content">
+        <!-- 视频播放器 -->
+        <div class="video-player">
+            <div>视频播放器区域</div>
+        </div>
+        
+        <!-- 视频控制栏 -->
+        <div class="controls">
+            <div style="display: flex; align-items: center; gap: var(--spacing-lg);">
+                <button class="btn btn-primary">播放</button>
+                <button class="btn btn-outline">暂停</button>
+                <button class="btn btn-outline">停止</button>
+                <div style="margin-left: auto;">
+                    <select style="padding: var(--spacing-sm); border-radius: var(--border-radius-sm); border: 1px solid var(--border-color);">
+                        <option>自动</option>
+                        <option>流畅</option>
+                        <option>标清</option>
+                        <option>高清</option>
+                        <option>超清</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 视频信息 -->
+        <div class="video-info">
+            <h2 class="video-title">视频标题示例</h2>
+            <div class="video-meta">
+                <span>播放量: 123,456</span>
+                <span>时长: 1:30:45</span>
+                <span>分类: 电影</span>
+                <span>更新时间: 2025-11-27</span>
+            </div>
+            <div class="video-description">
+                这是一段视频描述，用于展示视频的详细信息。视频内容丰富，画面清晰，音质优良，是一部值得观看的好作品。
+            </div>
+            <div class="video-actions">
+                <button class="btn btn-outline" onclick="addToFavorites('video123')">❤️ 收藏</button>
+                <button class="btn btn-outline">📤 分享</button>
+                <button class="btn btn-outline">💬 评论</button>
+                <button class="btn btn-outline">📥 下载</button>
+            </div>
+        </div>
+        
+        <!-- 相关推荐 -->
+        <h3 class="related-title">相关推荐</h3>
+        <div class="grid" id="relatedVideos">
+            <!-- 相关视频将通过JavaScript动态生成 -->
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 LifeTV. All rights reserved.</p>
+    </footer>
+
+    <!-- 引入JavaScript -->
+    <script src="../../js/shared.js"></script>
+    <script>
+        // 视频播放页特定JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成并渲染相关视频
+            const relatedVideos = generateMockVideos(8);
+            renderVideoCards('relatedVideos', relatedVideos);
+        });
+    </script>
+</body>
+</html>

@@ -134,3 +134,245 @@ flowchart TD
 - 各阶段错误捕获
 - 错误信息标准化
 - 错误恢复机制 
+
+## TVBox配置解析流程
+
+```mermaid
+flowchart TD
+    A[开始] --> B[获取TVBox配置URL]
+    B --> C[调用TvboxService.fetchConfig]
+    C --> D{HTTP请求是否成功?}
+    D -->|是| E[解析JSON响应]
+    D -->|否| F[抛出获取配置失败异常]
+    E --> G[创建TvboxConfig对象]
+    G --> H[解析站点列表sites]
+    G --> I[解析解析器列表parses]
+    H --> J[保存到数据库]
+    I --> J
+    J --> K[更新Provider状态]
+    K --> L[结束]
+    F --> L
+```
+
+## 数据源添加流程
+
+```mermaid
+flowchart TD
+    A[开始] --> B{选择添加方式}
+    B -->|默认配置| C[使用默认URL]
+    B -->|自定义URL| D[输入新URL]
+    C --> E[调用refreshSites]
+    D --> F[调用updateFromUrl]
+    E --> G[获取配置]
+    F --> G
+    G --> H{配置是否有效?}
+    H -->|是| I[转换为数据库实体]
+    H -->|否| J[显示错误信息]
+    I --> K[保存到Isar数据库]
+    K --> L[更新UI显示]
+    J --> M[结束]
+    L --> M
+```
+
+## 数据源列表管理流程
+
+```mermaid
+flowchart TD
+    A[开始] --> B[加载数据源列表]
+    B --> C{是否有数据源?}
+    C -->|否| D[加载默认数据源]
+    C -->|是| E[显示数据源列表]
+    
+    %% 数据源操作
+    E --> F{用户操作}
+    F -->|添加| G[添加新数据源]
+    F -->|切换| H[切换数据源]
+    F -->|删除| I[删除数据源]
+    F -->|编辑| J[编辑数据源]
+    
+    %% 添加数据源流程
+    G --> K{选择类型}
+    K -->|默认| L[使用默认URL]
+    K -->|自定义| M[输入URL]
+    L --> N[验证并解析]
+    M --> N
+    N -->|成功| O[保存到数据库]
+    N -->|失败| P[显示错误]
+    
+    %% 切换数据源流程
+    H --> Q[更新当前数据源标记]
+    Q --> R[重新加载视频源]
+    
+    %% 删除数据源流程
+    I --> S{是否为当前源?}
+    S -->|是| T[切换到默认源]
+    S -->|否| U[直接删除]
+    
+    %% 编辑数据源流程
+    J --> V[更新数据源信息]
+    V --> W[刷新数据源列表]
+    
+    %% 结果处理
+    O --> W
+    T --> W
+    U --> W
+    R --> W
+    P --> W
+    W --> X[结束]
+```
+
+### 数据源管理数据结构
+
+```mermaid
+classDiagram
+    class VideoSourceList {
+        +List<VideoSource> sources
+        +VideoSource? currentSource
+        +DateTime lastUpdated
+        +addSource(VideoSource)
+        +removeSource(String)
+        +switchSource(String)
+        +updateSource(VideoSource)
+    }
+    
+    class VideoSource {
+        +String id
+        +String name
+        +String url
+        +bool isDefault
+        +bool isActive
+        +DateTime createdAt
+        +DateTime updatedAt
+        +SourceType type
+    }
+    
+    class VideoSourceEntity {
+        +Id id
+        +String name
+        +String url
+        +bool isDefault
+        +bool isActive
+        +DateTime createdAt
+        +DateTime updatedAt
+        +int type
+    }
+    
+    VideoSourceList --> VideoSource : contains
+    VideoSource --> VideoSourceEntity : maps to
+```
+
+### 数据源状态管理流程
+
+```mermaid
+flowchart TD
+    A[VideoSourceListNotifier] --> B[build初始化]
+    B --> C[加载所有数据源]
+    C --> D{有活跃数据源?}
+    D -->|否| E[设置默认源为活跃]
+    D -->|是| F[加载活跃源配置]
+    
+    A --> G[addSource添加源]
+    G --> H[保存到数据库]
+    H --> I[更新状态]
+    
+    A --> J[removeSource删除源]
+    J --> K{是活跃源?}
+    K -->|是| L[切换到默认源]
+    K -->|否| M[从数据库删除]
+    L --> I
+    M --> I
+    
+    A --> N[switchSource切换源]
+    N --> O[更新活跃状态]
+    O --> P[加载新源配置]
+    P --> I
+    
+    I --> Q[通知UI更新]
+```
+
+## 数据源切换时序图
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant VM as VideoSourceListNotifier
+    participant DB as Database
+    participant S as VideoSourceService
+    
+    U->>VM: 选择新数据源
+    VM->>DB: 更新当前源状态
+    VM->>S: 加载新源配置
+    S->>DB: 保存新配置
+    S-->>VM: 返回结果
+    VM-->>U: 更新UI显示
+```
+
+## 数据结构
+
+### TvboxConfig
+```mermaid
+classDiagram
+    class TvboxConfig {
+        +String spider
+        +String wallpaper
+        +List<TvboxSite> sites
+        +List<TvboxParse> parses
+    }
+    class TvboxSite {
+        +String key
+        +String name
+        +int type
+        +String api
+        +bool searchable
+        +bool quickSearch
+        +bool filterable
+        +String? ext
+        +int playerType
+    }
+    class TvboxParse {
+        +String name
+        +int type
+        +String url
+        +Map<String,dynamic>? ext
+    }
+    TvboxConfig --> TvboxSite : contains
+    TvboxConfig --> TvboxParse : contains
+```
+
+### 数据库实体
+```mermaid
+classDiagram
+    class TvboxSiteEntity {
+        +Id id
+        +String key
+        +String name
+        +int type
+        +String api
+        +bool searchable
+        +bool quickSearch
+        +bool filterable
+        +String? ext
+        +int playerType
+        +DateTime updatedAt
+    }
+```
+
+## 状态管理流程
+
+```mermaid
+flowchart TD
+    A[TvboxSitesNotifier] --> B[build初始化]
+    B --> C[加载数据库中的站点]
+    A --> D[refreshSites刷新]
+    D --> E[更新状态为loading]
+    E --> F[获取新配置]
+    F --> G[保存到数据库]
+    G --> H[重新加载站点]
+    H --> I[更新状态为data/error]
+    A --> J[updateFromUrl更新]
+    J --> K[更新状态为loading]
+    K --> L[从URL获取配置]
+    L --> M[保存到数据库]
+    M --> N[重新加载站点]
+    N --> O[更新状态为data/error]
+``` 

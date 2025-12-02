@@ -1,0 +1,94 @@
+@startuml 解析逻辑与播放逻辑类图
+
+' 解析逻辑相关类
+interface SiteParser {
+  + Future<Map<String, dynamic>> parseSiteConfig(String url)
+  + Future<List<VideoCategory>> parseCategories(dynamic data)
+  + Future<List<Video>> parseVideoList(dynamic data, String sourceKey)
+  + Future<VideoDetail> parseVideoDetail(dynamic data, String sourceKey)
+  + Future<List<VideoPlayUrl>> parsePlayUrls(dynamic data)
+  + Future<List<Video>> searchVideos(String keyword, String sourceKey)
+}
+
+class DefaultSiteParser implements SiteParser {
+  + Future<Map<String, dynamic>> parseSiteConfig(String url)
+  + Future<List<VideoCategory>> parseCategories(dynamic data)
+  + Future<List<Video>> parseVideoList(dynamic data, String sourceKey)
+  + Future<VideoDetail> parseVideoDetail(dynamic data, String sourceKey)
+  + Future<List<VideoPlayUrl>> parsePlayUrls(dynamic data)
+  + Future<List<Video>> searchVideos(String keyword, String sourceKey)
+}
+
+class MeowTvParser implements SiteParser {
+  + Future<Map<String, dynamic>> parseSiteConfig(String url)
+  + Future<List<VideoCategory>> parseCategories(dynamic data)
+  + Future<List<Video>> parseVideoList(dynamic data, String sourceKey)
+  + Future<VideoDetail> parseVideoDetail(dynamic data, String sourceKey)
+  + Future<List<VideoPlayUrl>> parsePlayUrls(dynamic data)
+  + Future<List<Video>> searchVideos(String keyword, String sourceKey)
+}
+
+class SiteParserFactory {
+  + static SiteParser getParser(String siteType)
+  + static SiteParser getParserByUrl(String url)
+}
+
+class SiteParserService {
+  - Map<String, SiteParser> _parsers
+  + SiteParser getParser(String siteKey)
+  + Future<List<Video>> parseVideos(String siteKey, dynamic response, VideoSourceConfig site)
+  + Future<Video> parseVideoDetail(String siteKey, dynamic response, VideoSourceConfig site)
+}
+
+class VideoSourceService {
+  - SiteParserFactory _parserFactory
+  + Future<List<Video>> fetchVideos(VideoSourceConfig source, {String? categoryId})
+  + Future<List<Video>> _fetchVideosFromApi(VideoSourceConfig source, {String? categoryId})
+  + Future<List<Video>> _parseVideoList(String responseBody, VideoSourceConfig source)
+}
+
+class TvboxService {
+  - SiteParserService _parserService
+  + Future<TvboxConfig> fetchConfig(String url)
+  + Future<void> saveToDatabase(TvboxConfig config, Isar isar)
+  + Future<dynamic> fetchSiteData(String apiUrl)
+}
+
+' 播放逻辑相关类
+class PlayerController {
+  - VideoPlayerController? _videoPlayerController
+  - ChewieController? _chewieController
+  + Future<void> initialize(String url)
+  + void togglePlay()
+  + void seekTo(Duration position)
+  + void seekRelative(Duration offset)
+}
+
+class VideoPlayerController {
+  + Future<void> initialize()
+  + Future<void> play()
+  + Future<void> pause()
+  + Future<void> seekTo(Duration position)
+  + void dispose()
+}
+
+class ChewieController {
+  - VideoPlayerController videoPlayerController
+  + ChewieController({required VideoPlayerController videoPlayerController, ...})
+  + void dispose()
+}
+
+' 关系
+SiteParserFactory ..> SiteParser : 创建
+SiteParserService ..> SiteParser : 使用
+VideoSourceService ..> SiteParserFactory : 使用
+TvboxService ..> SiteParserService : 使用
+PlayerController ..> VideoPlayerController : 组合
+PlayerController ..> ChewieController : 组合
+ChewieController ..> VideoPlayerController : 组合
+
+' 继承关系
+DefaultSiteParser --|> SiteParser
+MeowTvParser --|> SiteParser
+
+@enduml
