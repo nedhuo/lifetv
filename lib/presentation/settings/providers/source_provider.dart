@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../../domain/models/video_source.dart';
-import '../../domain/services/video_source_service.dart';
+import '../../../domain/media_source/video_source.dart';
+
 
 part 'source_provider.g.dart';
 

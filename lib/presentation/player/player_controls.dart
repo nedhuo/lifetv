@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:chewie/chewie.dart';
+
 import 'providers/player_provider.dart';
 
 class PlayerControls extends ConsumerStatefulWidget {
@@ -64,10 +64,10 @@ class _PlayerControlsState extends ConsumerState<PlayerControls> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
+                Colors.black.withValues(alpha: 0.7),
                 Colors.transparent,
                 Colors.transparent,
-                Colors.black.withOpacity(0.7),
+                Colors.black.withValues(alpha: 0.7),
               ],
             ),
           ),
@@ -162,7 +162,7 @@ class _BottomControlBar extends ConsumerWidget {
           playerState.when(
             data: (controller) {
               if (controller.isPlaying) {
-                final duration = controller.videoPlayerController.value.duration ?? Duration.zero;
+                final duration = controller.videoPlayerController.value.duration;
                 final position = controller.videoPlayerController.value.position;
                 return Row(
                   children: [

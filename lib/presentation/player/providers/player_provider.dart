@@ -26,7 +26,7 @@ class PlayerController extends _$PlayerController {
     state = const AsyncLoading();
     
     try {
-      _videoPlayerController = VideoPlayerController.network(url);
+      _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
       await _videoPlayerController!.initialize();
       
       _chewieController = ChewieController(

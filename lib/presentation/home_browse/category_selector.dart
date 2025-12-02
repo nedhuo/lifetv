@@ -3,8 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../data/repositories/video_source_service.dart';
-import '../../domain/media_source/video_source_config.dart';
-import '../../data/datasources/video_source_list_provider.dart';
+
 import '../../data/dtos/video_source_entity.dart';
 
 final selectedSourceProvider = StateProvider<VideoSourceEntity?>((ref) => null);

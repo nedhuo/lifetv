@@ -1,10 +1,10 @@
-import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
-import '../models/tvbox_config.dart';
-import '../../data/models/tvbox_site_entity.dart';
-import './site_parser_service.dart';
+import '../../domain/entities/tvbox_config.dart';
+import '../../data/dtos/tvbox_site_entity.dart';
+import '../../source/parsers/site_parser_service.dart';
 
 final tvboxServiceProvider = Provider((ref) => TvboxService());
 

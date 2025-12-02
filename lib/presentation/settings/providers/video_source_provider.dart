@@ -1,8 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../domain/models/video_source_config.dart';
-import '../../domain/services/video_source_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../../domain/media_source/video_source_config.dart';
+import '../../../data/repositories/video_source_service.dart';
 
 final videoSourceServiceProvider = Provider((ref) => VideoSourceService());
 
@@ -27,7 +26,7 @@ class VideoSourceConfigNotifier extends AsyncNotifier<VideoSourceConfig> {
     } catch (e) {
       print('获取默认视频源配置失败: $e');
       // 返回一个备用配置
-      return VideoSourceConfig(
+      return const VideoSourceConfig(
         key: 'default',
         name: '默认源',
         api: 'https://api.example.com',

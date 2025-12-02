@@ -1,8 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/video_source_entity.dart';
-import '../../domain/services/video_source_service.dart';
+import '../../data/dtos/video_source_entity.dart';
+import '../../data/repositories/video_source_service.dart';
 
 final videoSourceListProvider = AsyncNotifierProvider<VideoSourceListNotifier, List<VideoSourceEntity>>(() {
   return VideoSourceListNotifier();

@@ -33,9 +33,6 @@ class _VideoPlayerWidgetState extends ConsumerState<VideoPlayerWidget> {
 
     return playerState.when(
       data: (controller) {
-        if (controller == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
         return Chewie(controller: controller);
       },
       loading: () => const Center(child: CircularProgressIndicator()),

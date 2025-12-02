@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../data/datasources/video_source_list_provider.dart';
-import '../../domain/media_source/video_source_config.dart';
+
 import '../../data/dtos/video_source_entity.dart';
 
 class SourcePage extends HookConsumerWidget {

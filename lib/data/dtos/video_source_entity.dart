@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
-import '../../domain/models/video_source_config.dart';
+
+import '../../domain/media_source/video_source_config.dart';
 
 part 'video_source_entity.g.dart';
 
