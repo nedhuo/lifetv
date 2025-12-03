@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.nedhuo.lifetv.lifetv"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = (project.findProperty("android.ndkVersion") as String? ?: flutter.ndkVersion)
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

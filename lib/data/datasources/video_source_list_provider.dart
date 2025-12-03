@@ -1,6 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../data/dtos/video_source_entity.dart';
 import '../../data/repositories/video_source_service.dart';
 
@@ -10,31 +8,19 @@ final videoSourceListProvider = AsyncNotifierProvider<VideoSourceListNotifier, L
 
 class VideoSourceListNotifier extends AsyncNotifier<List<VideoSourceEntity>> {
   late final VideoSourceService _service;
-  late final Isar _isar;
+  List<VideoSourceEntity> _memorySources = [];
 
   @override
   Future<List<VideoSourceEntity>> build() async {
     _service = ref.read(videoSourceServiceProvider);
-    final dir = await getApplicationDocumentsDirectory();
-    _isar = await Isar.open(
-      [VideoSourceEntitySchema],
-      directory: dir.path,
-      maxSizeMiB: 32,
-      inspector: false,
-    );
     
     // 初始化默认源
-    await _service.initializeDefaultSource(_isar);
-    return _loadSources();
+    _memorySources = await _service.initializeDefaultSource([]);
+    return _memorySources;
   }
 
   Future<List<VideoSourceEntity>> _loadSources() async {
-    try {
-      return await _service.getAllSources(_isar);
-    } catch (e) {
-      print('加载视频源失败: $e');
-      return [];
-    }
+    return _memorySources;
   }
 
   Future<void> addSource({
@@ -47,8 +33,8 @@ class VideoSourceListNotifier extends AsyncNotifier<List<VideoSourceEntity>> {
         name: name,
         url: url,
       );
-      await _service.addSource(_isar, source);
-      state = AsyncValue.data(await _loadSources());
+      _memorySources = await _service.addSource(_memorySources, source);
+      state = AsyncValue.data(_memorySources);
     } catch (e) {
       print('添加视频源失败: $e');
       state = AsyncValue.error(e, StackTrace.current);
@@ -59,8 +45,8 @@ class VideoSourceListNotifier extends AsyncNotifier<List<VideoSourceEntity>> {
   Future<void> removeSource(String key) async {
     state = const AsyncValue.loading();
     try {
-      await _service.removeSource(_isar, key);
-      state = AsyncValue.data(await _loadSources());
+      _memorySources = await _service.removeSource(_memorySources, key);
+      state = AsyncValue.data(_memorySources);
     } catch (e) {
       print('删除视频源失败: $e');
       state = AsyncValue.error(e, StackTrace.current);
@@ -71,8 +57,8 @@ class VideoSourceListNotifier extends AsyncNotifier<List<VideoSourceEntity>> {
   Future<void> switchSource(String key) async {
     state = const AsyncValue.loading();
     try {
-      await _service.setActiveSource(_isar, key);
-      state = AsyncValue.data(await _loadSources());
+      _memorySources = await _service.setActiveSource(_memorySources, key);
+      state = AsyncValue.data(_memorySources);
     } catch (e) {
       print('切换视频源失败: $e');
       state = AsyncValue.error(e, StackTrace.current);
@@ -83,8 +69,8 @@ class VideoSourceListNotifier extends AsyncNotifier<List<VideoSourceEntity>> {
   Future<void> updateSource(VideoSourceEntity source) async {
     state = const AsyncValue.loading();
     try {
-      await _service.updateSource(_isar, source);
-      state = AsyncValue.data(await _loadSources());
+      _memorySources = await _service.updateSource(_memorySources, source);
+      state = AsyncValue.data(_memorySources);
     } catch (e) {
       print('更新视频源失败: $e');
       state = AsyncValue.error(e, StackTrace.current);
@@ -94,7 +80,7 @@ class VideoSourceListNotifier extends AsyncNotifier<List<VideoSourceEntity>> {
 
   Future<VideoSourceEntity?> getActiveSource() async {
     try {
-      return await _service.getActiveSource(_isar);
+      return await _service.getActiveSource(_memorySources);
     } catch (e) {
       print('获取活跃视频源失败: $e');
       return null;

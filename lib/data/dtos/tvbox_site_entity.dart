@@ -1,38 +1,43 @@
-import 'package:isar/isar.dart';
-
-part 'tvbox_site_entity.g.dart';
-
-@collection
 class TvboxSiteEntity {
-  Id id = Isar.autoIncrement;
+  int id = 0;
   
-  @Index(unique: true)
-  late String key;
-  
-  late String name;
-  late int type;
-  late String api;
-  late bool searchable;
-  late bool quickSearch;
-  late bool filterable;
+  String key;
+  String name;
+  int type;
+  String api;
+  bool searchable;
+  bool quickSearch;
+  bool filterable;
   String? ext;
-  late int playerType;
-  late DateTime updatedAt;
+  int playerType;
+  DateTime updatedAt;
 
-  TvboxSiteEntity();
+  TvboxSiteEntity({
+    this.id = 0,
+    required this.key,
+    required this.name,
+    required this.type,
+    required this.api,
+    required this.searchable,
+    required this.quickSearch,
+    required this.filterable,
+    this.ext,
+    required this.playerType,
+    required this.updatedAt,
+  });
 
   factory TvboxSiteEntity.fromTvboxSite(dynamic site) {
-    final entity = TvboxSiteEntity()
-      ..key = site.key
-      ..name = site.name
-      ..type = site.type
-      ..api = site.api
-      ..searchable = site.searchable
-      ..quickSearch = site.quickSearch
-      ..filterable = site.filterable
-      ..ext = site.ext
-      ..playerType = site.playerType
-      ..updatedAt = DateTime.now();
-    return entity;
+    return TvboxSiteEntity(
+      key: site.key,
+      name: site.name,
+      type: site.type,
+      api: site.api,
+      searchable: site.searchable,
+      quickSearch: site.quickSearch,
+      filterable: site.filterable,
+      ext: site.ext,
+      playerType: site.playerType,
+      updatedAt: DateTime.now(),
+    );
   }
 } 

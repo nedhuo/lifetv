@@ -1,9 +1,10 @@
+import 'dart:collection';
 import 'dart:convert';
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import '../../domain/media_source/video_source_config.dart';
 import '../../domain/entities/video.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
 import '../../data/dtos/video_source_entity.dart';
 import 'package:dio/dio.dart';
 import '../../source/parsers/site_parser.dart';
@@ -229,16 +230,16 @@ class VideoSourceService {
     }
   }
 
-  Future<List<VideoSourceEntity>> getAllSources(Isar isar) async {
-    return await isar.videoSourceEntitys.where().findAll();
+  Future<List<VideoSourceEntity>> getAllSources(List<VideoSourceEntity> sources) async {
+    return sources;
   }
 
-  Future<VideoSourceEntity?> getActiveSource(Isar isar) async {
-    return await isar.videoSourceEntitys.filter().isActiveEqualTo(true).findFirst();
+  Future<VideoSourceEntity?> getActiveSource(List<VideoSourceEntity> sources) async {
+    return sources.firstWhereOrNull((source) => source.isActive);
   }
 
-  Future<VideoSourceEntity?> getDefaultSource(Isar isar) async {
-    return await isar.videoSourceEntitys.filter().isDefaultEqualTo(true).findFirst();
+  Future<VideoSourceEntity?> getDefaultSource(List<VideoSourceEntity> sources) async {
+    return sources.firstWhereOrNull((source) => source.isDefault);
   }
 
   Future<bool> validateSource(String url) async {
@@ -252,60 +253,173 @@ class VideoSourceService {
     }
   }
 
-  Future<void> addSource(Isar isar, VideoSourceEntity source) async {
-    await isar.writeTxn(() async {
-      await isar.videoSourceEntitys.put(source);
-    });
+  Future<List<VideoSourceEntity>> addSource(List<VideoSourceEntity> sources, VideoSourceEntity source) async {
+    final updatedSources = [...sources];
+    updatedSources.add(source);
+    return updatedSources;
   }
 
-  Future<void> removeSource(Isar isar, String key) async {
-    await isar.writeTxn(() async {
-      final source = await isar.videoSourceEntitys.filter().keyEqualTo(key).findFirst();
-      if (source != null) {
-        await isar.videoSourceEntitys.delete(source.id);
-      }
-    });
+  Future<List<VideoSourceEntity>> removeSource(List<VideoSourceEntity> sources, String key) async {
+    final updatedSources = [...sources];
+    updatedSources.removeWhere((s) => s.key == key);
+    return updatedSources;
   }
 
-  Future<void> setActiveSource(Isar isar, String key) async {
-    await isar.writeTxn(() async {
-      // 先将所有源设置为非活跃
-      final allSources = await isar.videoSourceEntitys.where().findAll();
-      for (var source in allSources) {
-        source.isActive = false;
-        await isar.videoSourceEntitys.put(source);
-      }
+  Future<List<VideoSourceEntity>> setActiveSource(List<VideoSourceEntity> sources, String key) async {
+    final updatedSources = [...sources];
+    // 先将所有源设置为非活跃
+    for (var i = 0; i < updatedSources.length; i++) {
+      updatedSources[i] = VideoSourceEntity(
+        key: updatedSources[i].key,
+        name: updatedSources[i].name,
+        url: updatedSources[i].url,
+        api: updatedSources[i].api,
+        type: updatedSources[i].type,
+        group: updatedSources[i].group,
+        logo: updatedSources[i].logo,
+        ua: updatedSources[i].ua,
+        referer: updatedSources[i].referer,
+        origin: updatedSources[i].origin,
+        cookie: updatedSources[i].cookie,
+        proxy: updatedSources[i].proxy,
+        header: updatedSources[i].header,
+        click: updatedSources[i].click,
+        desc: updatedSources[i].desc,
+        ext: updatedSources[i].ext,
+        jar: updatedSources[i].jar,
+        categories: updatedSources[i].categories,
+        searchable: updatedSources[i].searchable,
+        quickSearch: updatedSources[i].quickSearch,
+        filterable: updatedSources[i].filterable,
+        playerType: updatedSources[i].playerType,
+        searchUrl: updatedSources[i].searchUrl,
+        playUrl: updatedSources[i].playUrl,
+        isDefault: updatedSources[i].isDefault,
+        isActive: false,
+      )..id = updatedSources[i].id
+       ..createdAt = updatedSources[i].createdAt
+       ..updatedAt = updatedSources[i].updatedAt;
+    }
 
-      // 将指定源设置为活跃
-      final source = await isar.videoSourceEntitys.filter().keyEqualTo(key).findFirst();
-      if (source != null) {
-        source.isActive = true;
-        await isar.videoSourceEntitys.put(source);
-      }
-    });
+    // 将指定源设置为活跃
+    final sourceIndex = updatedSources.indexWhere((s) => s.key == key);
+    if (sourceIndex != -1) {
+      final source = updatedSources[sourceIndex];
+      updatedSources[sourceIndex] = VideoSourceEntity(
+        key: source.key,
+        name: source.name,
+        url: source.url,
+        api: source.api,
+        type: source.type,
+        group: source.group,
+        logo: source.logo,
+        ua: source.ua,
+        referer: source.referer,
+        origin: source.origin,
+        cookie: source.cookie,
+        proxy: source.proxy,
+        header: source.header,
+        click: source.click,
+        desc: source.desc,
+        ext: source.ext,
+        jar: source.jar,
+        categories: source.categories,
+        searchable: source.searchable,
+        quickSearch: source.quickSearch,
+        filterable: source.filterable,
+        playerType: source.playerType,
+        searchUrl: source.searchUrl,
+        playUrl: source.playUrl,
+        isDefault: source.isDefault,
+        isActive: true,
+      )..id = source.id
+       ..createdAt = source.createdAt
+       ..updatedAt = DateTime.now();
+    }
+
+    return updatedSources;
   }
 
-  Future<void> initializeDefaultSource(Isar isar) async {
-    final defaultSource = await getDefaultSource(isar);
+  Future<List<VideoSourceEntity>> initializeDefaultSource(List<VideoSourceEntity> sources) async {
+    final defaultSource = sources.firstWhereOrNull((s) => s.isDefault);
     if (defaultSource == null) {
       try {
         final config = await fetchSourceConfig(defaultSourceUrl);
         if (config.sites.isNotEmpty) {
           final source = VideoSourceEntity.fromConfig(config.sites.first);
-          source.isDefault = true;
-          source.isActive = true;
-          await addSource(isar, source);
+          final updatedSource = VideoSourceEntity(
+            key: source.key,
+            name: source.name,
+            url: source.url,
+            api: source.api,
+            type: source.type,
+            group: source.group,
+            logo: source.logo,
+            ua: source.ua,
+            referer: source.referer,
+            origin: source.origin,
+            cookie: source.cookie,
+            proxy: source.proxy,
+            header: source.header,
+            click: source.click,
+            desc: source.desc,
+            ext: source.ext,
+            jar: source.jar,
+            categories: source.categories,
+            searchable: source.searchable,
+            quickSearch: source.quickSearch,
+            filterable: source.filterable,
+            playerType: source.playerType,
+            searchUrl: source.searchUrl,
+            playUrl: source.playUrl,
+            isDefault: true,
+            isActive: true,
+          );
+          return [...sources, updatedSource];
         }
       } catch (e) {
         print('初始化默认视频源失败: $e');
       }
     }
+    return sources;
   }
 
-  Future<void> updateSource(Isar isar, VideoSourceEntity source) async {
-    await isar.writeTxn(() async {
-      source.updatedAt = DateTime.now();
-      await isar.videoSourceEntitys.put(source);
-    });
+  Future<List<VideoSourceEntity>> updateSource(List<VideoSourceEntity> sources, VideoSourceEntity updatedSource) async {
+    final updatedSources = [...sources];
+    final index = updatedSources.indexWhere((s) => s.key == updatedSource.key);
+    if (index != -1) {
+      final source = updatedSources[index];
+      updatedSources[index] = VideoSourceEntity(
+        key: updatedSource.key,
+        name: updatedSource.name,
+        url: updatedSource.url,
+        api: updatedSource.api,
+        type: updatedSource.type,
+        group: updatedSource.group,
+        logo: updatedSource.logo,
+        ua: updatedSource.ua,
+        referer: updatedSource.referer,
+        origin: updatedSource.origin,
+        cookie: updatedSource.cookie,
+        proxy: updatedSource.proxy,
+        header: updatedSource.header,
+        click: updatedSource.click,
+        desc: updatedSource.desc,
+        ext: updatedSource.ext,
+        jar: updatedSource.jar,
+        categories: updatedSource.categories,
+        searchable: updatedSource.searchable,
+        quickSearch: updatedSource.quickSearch,
+        filterable: updatedSource.filterable,
+        playerType: updatedSource.playerType,
+        searchUrl: updatedSource.searchUrl,
+        playUrl: updatedSource.playUrl,
+        isDefault: updatedSource.isDefault,
+        isActive: updatedSource.isActive,
+      )..id = source.id
+       ..createdAt = source.createdAt
+       ..updatedAt = DateTime.now();
+    }
+    return updatedSources;
   }
 }

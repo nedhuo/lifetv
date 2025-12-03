@@ -1,7 +1,6 @@
 
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
 import '../../domain/entities/tvbox_config.dart';
 import '../../data/dtos/tvbox_site_entity.dart';
 import '../../source/parsers/site_parser_service.dart';
@@ -26,28 +25,15 @@ class TvboxService {
     }
   }
 
-  Future<void> saveToDatabase(TvboxConfig config, Isar isar) async {
-    try {
-      await isar.writeTxn(() async {
-        // 保存站点信息
-        for (final site in config.sites) {
-          final entity = TvboxSiteEntity.fromTvboxSite(site);
-          await isar.tvboxSiteEntitys.put(entity);
-        }
-      });
-    } catch (e) {
-      throw Exception('保存到数据库出错: $e');
-    }
+  Future<List<TvboxSiteEntity>> getAllSites() async {
+    // 简化实现，返回空列表
+    return [];
   }
 
-  Future<List<TvboxSiteEntity>> getAllSites(Isar isar) async {
-    return await isar.tvboxSiteEntitys.where().findAll();
-  }
-
-  Future<void> updateSites(String configUrl, Isar isar) async {
+  Future<void> updateSites(String configUrl) async {
     try {
       final config = await fetchConfig(configUrl);
-      await saveToDatabase(config, isar);
+      // 简化实现，不保存到数据库
     } catch (e) {
       throw Exception('更新站点出错: $e');
     }

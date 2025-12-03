@@ -1,24 +1,14 @@
 import 'dart:math';
-import 'package:isar/isar.dart';
 
 import '../../domain/media_source/video_source_config.dart';
 
-part 'video_source_entity.g.dart';
-
-@Name("VideoSource")
-@collection
 class VideoSourceEntity {
   static final _random = Random();
 
-  Id id = Isar.autoIncrement;
+  int id = 0;
 
-  @Index(unique: true, replace: true)
   final String key;
-
-  @Index(unique: true, replace: true)
   final String name;
-
-  @Index(unique: true, replace: true)
   final String url;
 
   final String api;
@@ -43,7 +33,6 @@ class VideoSourceEntity {
   final String? searchUrl;
   final String? playUrl;
 
-  @Index()
   final int timestamp;
 
   bool isDefault;
